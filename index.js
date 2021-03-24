@@ -10,6 +10,7 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     console.log('client connected');
     socket.on('click', (msg) => {
+        console.log('Click');
         io.emit('clicked', msg);
     });
     socket.on('disconnect', () => {
