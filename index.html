@@ -13,8 +13,8 @@
         background: #f3f0f1;
     }
     body .button {
-        width: 400px;
-        height: 100px;
+        width: 600px;
+        height: 250px;
         background: #f3f0f1;
         position: relative;
         background: #f3f0f1;
@@ -25,9 +25,9 @@
         transition: all 0.1s ease-in-out;
     }
     body .button span {
-        line-height: 100px;
+        line-height: 250px;
         font-family: "Montserrat", sans-serif;
-        font-size: 32px;
+        font-size: 64px;
         font-weight: 100;
     }
     body .button {
@@ -44,10 +44,9 @@
 </style>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-    var socket = io();
-    openClose = () => {
-        socket.emit('click');
-    }
+    const socket = io();
+    const params = new URLSearchParams(window.location.href.split("?")[1])
+    openClose = () => { socket.emit('click', params.get("secret")) }
 </script>
 <div class="button" onclick="openClose()">
     <span>Open/Close</span>

@@ -10,11 +10,12 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     console.log('client connected');
     socket.on('click', (msg) => {
-        console.log('Click');
-        io.emit('clicked', msg);
+        if (msg === 'S3l3n1umSh@z@m') {
+            io.emit('clicked', msg)
+        }
     });
     socket.on('disconnect', () => {
-        console.log('Garagedoor disconnected');
+        console.log('client disconnected');
     });
 });
 
