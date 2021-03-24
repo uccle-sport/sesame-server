@@ -42,15 +42,15 @@
         box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.5), inset 8px 8px 16px rgba(0, 0, 0, 0.1);
     }
 </style>
-<div class="button" onclick="click()">
-    <span>Open/Close</span>
-</div>
 <script src="/socket.io/socket.io.js"></script>
 <script>
     var socket = io();
-    function click() {
+    openClose = () => {
         socket.emit('click');
     }
 </script>
+<div class="button" onclick="openClose()">
+    <span>Open/Close</span>
+</div>
 </body>
 </html>
