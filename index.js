@@ -8,7 +8,10 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    console.log('Garagedoor connected');
+    console.log('client connected');
+    socket.on('click', (msg) => {
+        io.emit('clicked', msg);
+    });
     socket.on('disconnect', () => {
         console.log('Garagedoor disconnected');
     });
