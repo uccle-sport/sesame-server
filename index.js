@@ -5,13 +5,16 @@ const PORT = process.env.PORT || 5000
 const GDS_SECRET = process.env.GDS_SECRET || 'S3l3n1umSh@z@m'
 
 console.log(`Secret is set to ${GDS_SECRET}`)
-
+const allowedStaticFiles = ['/index.html','/favicon.ico','/apple-touch-icon.png']
 const garageDoors = {}
 
 const validateToken = (token) => GDS_SECRET === token
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
+allowedStaticFiles.forEach(f => app.get(f, (req, res) => {
+        res.sendFile(__dirname + f);
+    }))
 
 function forward(action, uuid, token, callback) {
     if (validateToken(token)) {
