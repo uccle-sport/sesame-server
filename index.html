@@ -3,6 +3,18 @@
 <body>
 <style>
     @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+    span.status {
+        line-height: 250px;
+        font-family: "Montserrat", sans-serif;
+        font-size: 64px;
+        font-weight: 100;
+    }
+    span.since {
+        line-height: 250px;
+        font-family: "Montserrat", sans-serif;
+        font-size: 24px;
+        font-weight: 100;
+    }
     body {
         width: 100vw;
         height: 100vh;
@@ -54,7 +66,15 @@
     closeDoor = () => {
         socket.emit('close', {token: params.get("secret"), uuid: params.get("uuid")}, resp => console.log(JSON.stringify(resp, null, ' ')))
     }
+    setInterval(() => {
+        socket.emit('ping', {token: params.get("secret"), uuid: params.get("uuid")}, resp => {
+            console.log(JSON.stringify(resp, null, ' '));
+
+            document.getElementById("status").innerHTML = `<span class="status">${resp.closed ? "closed" : "open"}</span><span class="since">${new Date(resp.events && resp.events.length && resp.events[resp.events.length - 1].date)}</span>`
+        })
+    }, 2000)
 </script>
+<div id="status"></div>
 <div class="button" onclick="openDoor()">
     <span>Open</span>
 </div>
