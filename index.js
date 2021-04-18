@@ -21,19 +21,21 @@ function forward(action, uuid, token, callback) {
     }
 }
 
+function register(token, uuid, socket, uuids) {
+    if (validateToken(token)) {
+        console.log(`Registering: ${uuid}`);
+        garageDoors[uuid] = socket
+        uuids.push(uuid)
+    } else {
+        console.log(`Registering: ${uuid} failed due to incorrect token`);
+    }
+}
+
 io.on('connection', (socket) => {
     let uuids = []
     console.log('client connected');
-    socket.on('register', ({token, uuid}, callback) => {
-        if (validateToken(token)) {
-            console.log(`Registering: ${uuid}`);
-            garageDoors[uuid] = socket
-            uuids.push(uuid)
-        } else {
-            console.log(`Registering: ${uuid} failed due to incorrect token`);
-            callback({status: 401})
-        }
-    })
+    if (socket.handshake.query && socket.handshake.query.token) { register(socket.handshake.query.token, socket.handshake.query.uuid, socket, uuids) }
+    socket.on('register', ({token, uuid}, callback) => { register(token, uuid, socket, uuids) })
     socket.on('open', ({token, uuid}, callback) => forward('open', uuid, token, callback));
     socket.on('close', ({token, uuid}, callback) => forward('close', uuid, token, callback));
     socket.on('ping', ({token, uuid}, callback) => forward('ping', uuid, token, callback));
