@@ -26,9 +26,11 @@ io.on('connection', (socket) => {
     console.log('client connected');
     socket.on('register', ({token, uuid}, callback) => {
         if (validateToken(token)) {
+            console.log(`Registering: ${uuid}`);
             garageDoors[uuid] = socket
             uuids.push(uuid)
         } else {
+            console.log(`Registering: ${uuid} failed due to incorrect token`);
             callback({status: 401})
         }
     })
