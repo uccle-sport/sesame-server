@@ -60,6 +60,7 @@
 <script>
     const socket = io();
     const params = new URLSearchParams(window.location.href.split("?")[1]) || {}
+    const fdg = (n) => n<10?'0'+n:''+n
     openDoor = () => {
         socket.emit('open', {token: params.get("secret"), uuid: params.get("uuid")}, resp => console.log(JSON.stringify(resp, null, ' ')))
     }
@@ -74,7 +75,7 @@
                 const ev = r.events && r.events.length && r.events[r.events.length - 1]
                 const d = ev && new Date(ev.date)
 
-                document.getElementById("status").innerHTML = `<span class="status">${r.closing ? "closing": r.opening ? "opening" : r.closed ? "closed" : "open"} </span><span class="since">${d ? d.getDate() +"/"+ (d.getMonth()+1)+" "+d.getHours()+":"+d.getMinutes() : ''}</span>`
+                document.getElementById("status").innerHTML = `<span class="status">${r.closing ? "closing": r.opening ? "opening" : r.closed ? "closed" : "open"} </span><span class="since">${d ? fdg(d.getDate()) +"/"+ fdg(d.getMonth()+1)+" "+fdg(d.getHours())+":"+fdg(d.getMinutes()) : ''}</span>`
             } else {
                 document.getElementById("status").innerHTML = `<span class="status">UNKNOWN</span>`
             }
