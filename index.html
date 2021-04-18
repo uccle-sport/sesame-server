@@ -45,11 +45,19 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io();
-    const params = new URLSearchParams(window.location.href.split("?")[1])
-    openClose = () => { socket.emit('click', params.get("secret")) }
+    const params = new URLSearchParams(window.location.href.split("?")[1]) || {}
+    openDoor = () => {
+        socket.emit('open', {token: params.get("secret"), uuid: params.get("uuid")}, resp => console.log(JSON.stringify(resp, null, ' ')))
+    }
+    closeDoor = () => {
+        socket.emit('close', {token: params.get("secret"), uuid: params.get("uuid")}, resp => console.log(JSON.stringify(resp, null, ' ')))
+    }
 </script>
-<div class="button" onclick="openClose()">
-    <span>Open/Close</span>
+<div class="button" onclick="openDoor()">
+    <span>Open</span>
+</div>
+<div class="button" onclick="closeDoor()">
+    <span>Close</span>
 </div>
 </body>
 </html>
