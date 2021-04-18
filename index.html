@@ -69,8 +69,13 @@
     setInterval(() => {
         socket.emit('ping', {token: params.get("secret"), uuid: params.get("uuid")}, resp => {
             console.log(JSON.stringify(resp, null, ' '));
-
-            document.getElementById("status").innerHTML = `<span class="status">${resp.closed ? "closed" : "open"}</span><span class="since">${new Date(resp.events && resp.events.length && resp.events[resp.events.length - 1].date)}</span>`
+            if (resp.status === 200) {
+                const r = resp.response
+                const ev = r.events && r.events.length && r.events[r.events.length - 1]
+                document.getElementById("status").innerHTML = `<span class="status">${r.closed ? "closed" : "open"} </span><span class="since">${ev ? new Date(ev.date) : ''}</span>`
+            } else {
+                document.getElementById("status").innerHTML = `<span class="status">UNKNOWN</span>`
+            }
         })
     }, 2000)
 </script>
