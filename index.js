@@ -9,12 +9,9 @@ const allowedStaticFiles = ['/index.html','/favicon.ico','/apple-touch-icon.png'
 const garageDoors = {}
 
 const validateToken = (token) => GDS_SECRET === token
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-});
-allowedStaticFiles.forEach(f => app.get(f, (req, res) => {
-        res.sendFile(__dirname + f);
-    }))
+
+app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'))
+allowedStaticFiles.forEach(f => app.get(f, (req, res) => res.sendFile(__dirname + f)))
 
 function forward(action, uuid, token, callback) {
     if (validateToken(token)) {
