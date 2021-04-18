@@ -72,7 +72,9 @@
             if (resp.status === 200) {
                 const r = resp.response
                 const ev = r.events && r.events.length && r.events[r.events.length - 1]
-                document.getElementById("status").innerHTML = `<span class="status">${r.closed ? "closed" : "open"} </span><span class="since">${ev ? new Date(ev.date) : ''}</span>`
+                const d = ev && new Date(ev.date)
+
+                document.getElementById("status").innerHTML = `<span class="status">${r.closed ? "closed" : "open"} </span><span class="since">${d ? d.getDate() +"/"+ (d.getMonth()+1)+" "+d.getHours()+":"+d.getMinutes() : ''}</span>`
             } else {
                 document.getElementById("status").innerHTML = `<span class="status">UNKNOWN</span>`
             }
