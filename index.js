@@ -2,11 +2,11 @@ const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const PORT = process.env.PORT || 5000
-const SECRET = process.env.SECRET || 'S3l3n1umSh@z@m'
+const GDS_SECRET = process.env.GDS_SECRET || 'S3l3n1umSh@z@m'
 
 const garageDoors = {}
 
-const validateToken = (token) => SECRET === token
+const validateToken = (token) => GDS_SECRET === token
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
