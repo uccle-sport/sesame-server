@@ -4,13 +4,13 @@
 <style>
     @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
     span.status {
-        line-height: 250px;
+        line-height: 120px;
         font-family: "Montserrat", sans-serif;
         font-size: 64px;
         font-weight: 100;
     }
     span.since {
-        line-height: 250px;
+        line-height: 120px;
         font-family: "Montserrat", sans-serif;
         font-size: 24px;
         font-weight: 100;
@@ -74,7 +74,7 @@
                 const ev = r.events && r.events.length && r.events[r.events.length - 1]
                 const d = ev && new Date(ev.date)
 
-                document.getElementById("status").innerHTML = `<span class="status">${r.closed ? "closed" : "open"} </span><span class="since">${d ? d.getDate() +"/"+ (d.getMonth()+1)+" "+d.getHours()+":"+d.getMinutes() : ''}</span>`
+                document.getElementById("status").innerHTML = `<span class="status">${r.closing ? "closing": r.opening ? "opening" : r.closed ? "closed" : "open"} </span><span class="since">${d ? d.getDate() +"/"+ (d.getMonth()+1)+" "+d.getHours()+":"+d.getMinutes() : ''}</span>`
             } else {
                 document.getElementById("status").innerHTML = `<span class="status">UNKNOWN</span>`
             }
