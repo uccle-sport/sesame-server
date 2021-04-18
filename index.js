@@ -4,6 +4,8 @@ const io = require('socket.io')(http);
 const PORT = process.env.PORT || 5000
 const GDS_SECRET = process.env.GDS_SECRET || 'S3l3n1umSh@z@m'
 
+console.log(`Secret is set to ${GDS_SECRET}`)
+
 const garageDoors = {}
 
 const validateToken = (token) => GDS_SECRET === token
