@@ -6,15 +6,15 @@
 <style>
     @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
     span.status {
-        line-height: 120px;
+        line-height: 20vh;
         font-family: "Montserrat", sans-serif;
-        font-size: 64px;
+        font-size: 4em;
         font-weight: 100;
     }
     span.since {
-        line-height: 120px;
+        line-height: 20vh;
         font-family: "Montserrat", sans-serif;
-        font-size: 24px;
+        font-size: 2em;
         font-weight: 100;
     }
     body {
@@ -27,21 +27,22 @@
         background: #f3f0f1;
     }
     body .button {
-        width: 600px;
-        height: 250px;
+        width: 60vw;
+        height: 20vh;
         background: #f3f0f1;
-        position: relative;
-        background: #f3f0f1;
-        margin-bottom: 25px;
-        border-radius: 32px;
+        margin-bottom: 3vh;
+        border-radius: 3vh;
         text-align: center;
         cursor: pointer;
-        transition: all 0.1s ease-in-out;
+        transition: all 0.2s ease-in-out;
     }
     body .button span {
-        line-height: 250px;
+        position: relative;
+        display: block;
+        top: 50%;
+        transform: translateY(-50%);
         font-family: "Montserrat", sans-serif;
-        font-size: 64px;
+        font-size: 6em;
         font-weight: 100;
     }
     body .button {
@@ -53,6 +54,9 @@
     }
     body .button:active {
         opacity: 1;
+        background: #e0dfdf;
+        color: #4e4c9a;
+
         box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.5), inset 8px 8px 16px rgba(0, 0, 0, 0.1);
     }
 </style>
@@ -84,7 +88,7 @@
         })
     }, 2000)
 </script>
-<div id="status"></div>
+<div id="status"><span class="status">Querying</span></div>
 <div class="button" onclick="openDoor()">
     <span>Open</span>
 </div>
