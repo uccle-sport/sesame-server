@@ -5,14 +5,16 @@
 <body>
 <style>
     @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+    #status {
+        margin-top: 5vh;
+        margin-bottom: 5vh;
+    }
     span.status {
-        line-height: 20vh;
         font-family: "Montserrat", sans-serif;
         font-size: 4em;
         font-weight: 100;
     }
     span.since {
-        line-height: 20vh;
         font-family: "Montserrat", sans-serif;
         font-size: 2em;
         font-weight: 100;
@@ -27,8 +29,8 @@
         background: #f3f0f1;
     }
     body .button {
-        width: 60vw;
-        height: 20vh;
+        width: 75vw;
+        height: 17vh;
         background: #f3f0f1;
         margin-bottom: 3vh;
         border-radius: 3vh;
@@ -88,7 +90,7 @@
         })
     }, 2000)
 </script>
-<div id="status"><span class="status">Querying</span></div>
+<div id="status"><span class="status">Querying </span><span class="since"> 14:22</span></div>
 <div class="button" onclick="openDoor()">
     <span>Open</span>
 </div>
