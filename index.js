@@ -15,6 +15,7 @@ allowedStaticFiles.forEach(f => app.get(f, (req, res) => res.sendFile(__dirname 
 
 function forward(action, uuid, token, callback, msg) {
     if (validateToken(token)) {
+        console.log(`Forwarding: ${uuid}, ${action}${msg?' < '+JSON.stringify(msg):''}`);
         garageDoors[uuid] && garageDoors[uuid].emit(action, {ts: +new Date(), ...(msg || {})}, (response) => {
             callback({status: 200, response})
         }) || callback({status: 404})
