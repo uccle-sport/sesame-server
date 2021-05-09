@@ -13,9 +13,9 @@ const validateToken = (token) => GDS_SECRET === token
 app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'))
 allowedStaticFiles.forEach(f => app.get(f, (req, res) => res.sendFile(__dirname + f)))
 
-function forward(action, uuid, token, callback) {
+function forward(action, uuid, token, callback, msg) {
     if (validateToken(token)) {
-        garageDoors[uuid] && garageDoors[uuid].emit(action, {ts: +new Date()}, (response) => {
+        garageDoors[uuid] && garageDoors[uuid].emit(action, {ts: +new Date(), ...(msg || {})}, (response) => {
             callback({status: 200, response})
         }) || callback({status: 404})
     } else {
@@ -39,6 +39,7 @@ io.on('connection', (socket) => {
     if (socket.handshake.query && socket.handshake.query.token) { register(socket.handshake.query.token, socket.handshake.query.uuid, socket, uuids) }
     socket.on('register', ({token, uuid}, callback) => { register(token, uuid, socket, uuids) })
     socket.on('open', ({token, uuid}, callback) => forward('open', uuid, token, callback));
+    socket.on('keepOpen', ({token, uuid, duration}, callback) => forward('keepOpen', uuid, token, callback, {duration}));
     socket.on('close', ({token, uuid}, callback) => forward('close', uuid, token, callback));
     socket.on('ping', ({token, uuid}, callback) => forward('ping', uuid, token, callback));
 
