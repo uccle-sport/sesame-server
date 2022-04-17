@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sésame</title>
+	<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+	<link rel="manifest" href="./site.webmanifest">
+</head>
+<body>
+<div id="settings" style="display: none;" class="z-20 absolute bottom-0 left-0 w-screen h-screen pt-4 bg-pink-200 hidden">
+	<form class="flex h-full mt-16 px-8 flex-col w-full">
+		<div class="relative flex w-full flex-wrap items-stretch mb-3">
+			<input name="name" type="text" readonly placeholder="Name"
+						 class="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm border border-blueGray-300 outline-none focus:outline-none focus:ring w-full pr-10"/>
+			<span
+				class="z-10 h-full leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 py-3">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="16" height="16" viewBox="0, 0, 16, 16">
+  <g id="Layer_1">
+    <path
+			d="M15.68,8 C15.68,12.242 12.242,15.68 8,15.68 C3.758,15.68 0.32,12.242 0.32,8 C0.32,3.758 3.758,0.32 8,0.32 C12.242,0.32 15.68,3.758 15.68,8 z"
+			fill-opacity="0" stroke="#000000" stroke-width="0.64" stroke-linecap="round" stroke-miterlimit="10"/>
+    <path
+			d="M9.579,11.369 C9.532,10.853 9.55,10.493 9.55,10.022 C9.783,9.899 10.202,9.118 10.273,8.458 C10.456,8.443 10.746,8.263 10.831,7.556 C10.876,7.176 10.695,6.962 10.584,6.895 C10.883,5.996 11.504,3.215 9.436,2.928 C9.223,2.554 8.678,2.365 7.97,2.365 C5.137,2.417 4.795,4.505 5.416,6.895 C5.306,6.962 5.124,7.176 5.169,7.556 C5.254,8.263 5.544,8.443 5.727,8.458 C5.798,9.117 6.233,9.899 6.467,10.022 C6.467,10.493 6.485,10.853 6.438,11.369 C6.035,12.454 3.962,12.539 2.767,13.585 C4.017,14.843 6.042,15.743 8.18,15.743 C10.317,15.743 12.83,14.056 13.248,13.595 C12.06,12.54 9.983,12.458 9.579,11.369 z"
+			fill="#000000"/>
+  </g>
+</svg></span></div>
+		<div class="relative flex w-full flex-wrap items-stretch mb-3">
+			<input name="phone" type="text" readonly placeholder="Phone number"
+						 class="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm border border-blueGray-300 outline-none focus:outline-none focus:ring w-full pr-10"/>
+			<span
+				class="z-10 h-full leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 py-3">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="16" height="16" viewBox="0, 0, 16, 16">
+  <g id="Layer_1">
+    <path
+			d="M15,6.25 C15.414,6.25 15.75,5.914 15.75,5.5 C15.75,5.086 15.414,4.75 15,4.75 L12.125,4.75 L12.771,1.132 C12.844,0.724 12.573,0.334 12.165,0.262 C11.761,0.19 11.368,0.46 11.295,0.868 L10.602,4.75 L6.559,4.75 L7.205,1.132 C7.278,0.724 7.006,0.334 6.599,0.262 C6.195,0.19 5.802,0.46 5.729,0.868 L5.035,4.75 L1,4.75 C0.586,4.75 0.25,5.086 0.25,5.5 C0.25,5.914 0.586,6.25 1,6.25 L4.767,6.25 L4.142,9.75 L1,9.75 C0.586,9.75 0.25,10.086 0.25,10.5 C0.25,10.914 0.586,11.25 1,11.25 L3.875,11.25 L3.229,14.868 C3.156,15.276 3.427,15.665 3.835,15.738 C3.879,15.746 3.924,15.75 3.968,15.75 C4.324,15.75 4.64,15.495 4.705,15.132 L5.398,11.25 L9.441,11.25 L8.795,14.868 C8.722,15.276 8.994,15.665 9.401,15.738 C9.446,15.746 9.49,15.75 9.534,15.75 C9.891,15.75 10.207,15.495 10.271,15.132 L10.965,11.25 L15,11.25 C15.414,11.25 15.75,10.914 15.75,10.5 C15.75,10.086 15.414,9.75 15,9.75 L11.233,9.75 L11.858,6.25 L15,6.25 z M9.709,9.75 L5.666,9.75 L6.291,6.25 L10.334,6.25 L9.709,9.75 z"
+			fill="#000000"/>
+  </g>
+</svg>
+			</span>
+		</div>
+		<div class="self-center py-16">
+			<canvas id="qr" class="w-48 h-48"></canvas>
+		</div>
+	</form>
+</div>
+<div id="main" style="visibility: hidden;" class="flex flex-col h-screen justify-center flex-nowrap">
+	<nav class="z-50 relative flex flex-wrap items-center justify-between px-2 py-3 bg-pink-500 mb-3">
+		<div class="container px-4 mx-auto flex flex-wrap items-center justify-between">
+			<div class="relative flex justify-between w-auto px-4">
+				<button class="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white" onclick="sesame.hideSettings()">
+					Sésame
+				</button>
+			</div>
+			<div class="flex flex-grow items-center" id="example-navbar-warning">
+				<ul class="flex flex-row list-none ml-auto">
+					<li class="nav-item">
+						<button class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75 active:opacity-50" onclick="sesame.showSettings()">
+							Settings
+						</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="mx-auto h-96 w-full mx-8 flex-auto text-center bg"><span class="text-lg">Welcome to Sésame<br/>The bike shed remote control.</span></div>
+	<div class="flex-auto">
+		<div id="status" class="mx-auto py-4 flex-auto text-center">——</div>
+		<div class="relative pt-1 px-16 py-4">
+			<div class="overflow-hidden h-4 mb-4 text-xs flex rounded bg-pink-200">
+				<div id="progress" class="indeterminate shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-pink-500"></div>
+			</div>
+		</div>
+	</div>
+	<div class="mx-auto flex-auto">
+		<button id="button"
+			class="flex flex-nowrap justify-center w-48 bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+			type="button" onclick="sesame.toggle()">
+			<span class="mr-4 my-auto"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em"
+																			height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16"><path d="M16 9.226l-8-6.21l-8 6.21V6.694l8-6.21l8 6.21zM14 9v6h-4v-4H6v4H2V9l6-4.5z" fill="currentColor"/></svg></span>
+			<span id="button-label">Please wait</span>
+		</button>
+	</div>
+</div>
+<script src="bundle.js"></script>
+</body>
+</html>
