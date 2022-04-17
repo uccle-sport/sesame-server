@@ -3,7 +3,6 @@ import * as NodeCache from 'node-cache'
 import { v4 as uuidV4 } from 'uuid'
 import * as PouchDB from 'pouchdb'
 import * as PouchDBFind from 'pouchdb-find'
-import * as cors from 'cors'
 
 import { Server as HttpServer } from 'http'
 import { Server, Socket } from 'socket.io'
@@ -249,17 +248,21 @@ async function registerPid(
 			console.log(`Registering pid: ${uuid}, ${pid}`)
 			const fullId = getFullId(uuid, pid)
 			const invitationDoc = invitation && (await db.get(invitation).catch(() => null))
-			const rev = await db
-				.get(fullId)
-				.then((x) => x._rev)
-				.catch(() => undefined)
+			const {
+				rev,
+				phone: previousPhone,
+				confirmed,
+			} = await db
+				.get<{ phone: string; confirmed: boolean }>(fullId)
+				.then((x) => ({ rev: x._rev, phone: x.phone, confirmed: x.confirmed }))
+				.catch(() => ({ rev: undefined, phone: undefined, confirmed: undefined }))
 			const doc = {
 				_id: fullId,
 				_rev: rev,
 				uuid,
 				pid,
 				name,
-				phone,
+				phone: confirmed ? previousPhone : phone,
 				confirmed: !!invitationDoc,
 				type: 'remote',
 			}
