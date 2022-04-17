@@ -1900,10 +1900,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:^3.4.5":
-  version: 3.4.10
-  resolution: "@types/uuid@npm:3.4.10"
-  checksum: 9905d559a11dfe046b98cf5ea00f635b3c56b87615a8dedb466787d859dfe3616659e50093b211bc0869154cadfb16fa81e02c5c0402dc1508e54913e0c5a631
+"@types/uuid@npm:^8.3.4":
+  version: 8.3.4
+  resolution: "@types/uuid@npm:8.3.4"
+  checksum: 6f11f3ff70f30210edaa8071422d405e9c1d4e53abbe50fdce365150d3c698fe7bbff65c1e71ae080cbfb8fded860dbb5e174da96fdbbdfcaa3fb3daa474d20f
   languageName: node
   linkType: hard
 
@@ -5053,7 +5053,7 @@ __metadata:
     "@types/request": ^2.48.1
     "@types/request-promise-native": ^1.0.16
     "@types/sinon": ^10.0.0
-    "@types/uuid": ^3.4.5
+    "@types/uuid": ^8.3.4
     "@types/vorpal": ^1.12.0
     "@types/ws": ^8.2.0
     "@typescript-eslint/eslint-plugin": ^4.22.0
@@ -5093,6 +5093,7 @@ __metadata:
     socket.io-client: ^4.4.1
     ts-node: ^9.1.1
     typescript: ^4.2.4
+    uuid: ^8.3.2
   languageName: unknown
   linkType: soft
 
@@ -10447,7 +10448,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:8.3.2":
+"uuid@npm:8.3.2, uuid@npm:^8.3.2":
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
   bin:

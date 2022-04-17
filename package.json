@@ -9,7 +9,8 @@
 		"node-cache": "^5.1.2",
 		"pouchdb": "^7.2.2",
 		"pouchdb-find": "^7.2.2",
-		"socket.io": "^4.0.0"
+		"socket.io": "^4.0.0",
+		"uuid": "^8.3.2"
 	},
 	"devDependencies": {
 		"@types/chai": "^4.2.16",
@@ -25,7 +26,7 @@
 		"@types/request": "^2.48.1",
 		"@types/request-promise-native": "^1.0.16",
 		"@types/sinon": "^10.0.0",
-		"@types/uuid": "^3.4.5",
+		"@types/uuid": "^8.3.4",
 		"@types/vorpal": "^1.12.0",
 		"@types/ws": "^8.2.0",
 		"@typescript-eslint/eslint-plugin": "^4.22.0",
