@@ -8,3 +8,4 @@ node_modules
 !.yarn/sdks
 !.yarn/versions
 build
+git push heroku master

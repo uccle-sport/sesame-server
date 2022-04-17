@@ -249,8 +249,13 @@ async function registerPid(
 			console.log(`Registering pid: ${uuid}, ${pid}`)
 			const fullId = getFullId(uuid, pid)
 			const invitationDoc = invitation && (await db.get(invitation).catch(() => null))
+			const rev = await db
+				.get(fullId)
+				.then((x) => x._rev)
+				.catch(() => undefined)
 			const doc = {
 				_id: fullId,
+				_rev: rev,
 				uuid,
 				pid,
 				name,
