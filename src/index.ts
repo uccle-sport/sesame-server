@@ -34,6 +34,7 @@ interface ServerToClientEvents {
 		msg: { ts: number; token: string; uuid: string; pid: string },
 		callback?: Function
 	) => void
+	notify: (msg: { ts: number; token: string; uuid: string }, callback?: Function) => void
 }
 
 interface ClientToServerEvents {
@@ -48,6 +49,7 @@ interface ClientToServerEvents {
 	) => void
 	close: (msg: { token: string; uuid: string; pid: string }, callback?: Function) => void
 	ping: (msg: { token: string; uuid: string; pid: string }, callback?: Function) => void
+	notify: (msg: { token: string; uuid: string; msg: any }, callback?: Function) => void
 	confirm: (
 		msg: { token: string; uuid: string; pid: string; confirmed: boolean },
 		callback?: Function
@@ -112,6 +114,9 @@ db.createIndex({
 
 console.log(`Secret is set to ${GDS_SECRET}`)
 const garageDoors: {
+	[key: string]: Socket<ClientToServerEvents, ServerToClientEvents, {}>
+} = {}
+const remotes: {
 	[key: string]: Socket<ClientToServerEvents, ServerToClientEvents, {}>
 } = {}
 
@@ -201,19 +206,26 @@ async function isValid(uuid: string, pid: string, condition?: (x: PhoneIdentifie
 }
 
 async function forward(
-	action: 'open' | 'keepOpen' | 'close' | 'ping',
+	action: 'open' | 'keepOpen' | 'close' | 'ping' | 'notify',
 	token: string,
 	uuid: string,
-	pid: string,
+	pid: string | undefined,
 	callback: (response: Response, callback?: Function) => void,
 	msg?: any
 ) {
-	if (validateToken(token) && (ANONYMOUS || (await isValid(uuid, pid)))) {
+	if (
+		(validateToken(token) && pid && (ANONYMOUS || (await isValid(uuid, pid)))) ||
+		validateDeviceToken(token)
+	) {
 		console.log(`Forwarding: ${uuid}, ${action}${msg ? ' < ' + JSON.stringify(msg) : ''}`)
 		;(garageDoors[uuid] &&
 			garageDoors[uuid].emit(action, { ts: +new Date(), ...(msg || {}) }, (response: any) => {
 				callback({ status: 200, response })
 			})) ||
+			(remotes[uuid] &&
+				remotes[uuid].emit(action, { ts: +new Date(), ...(msg || {}) }, (response: any) => {
+					callback({ status: 200, response })
+				})) ||
 			callback({ status: 404 })
 	} else {
 		callback({ status: 401 })
@@ -315,12 +327,17 @@ async function invitations(
 async function connectDevice(
 	token: string,
 	uuid: string,
+	pid: string | undefined,
 	socket: Socket<ClientToServerEvents, ServerToClientEvents, {}>,
 	callback?: (response: Response, callback?: Function) => void
 ) {
 	if (validateDeviceToken(token)) {
 		console.log(`Registering: ${uuid}`)
 		garageDoors[uuid] = socket
+		callback?.({ status: 200, response: { uuid } })
+	} else if (pid && validateToken(token) && isValid(uuid, pid)) {
+		console.log(`Registering: ${uuid}`)
+		remotes[uuid] = socket
 		callback?.({ status: 200, response: { uuid } })
 	} else {
 		console.log(`Registering: ${uuid} failed due to incorrect token`)
@@ -384,6 +401,7 @@ io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents, 
 		connectDevice(
 			socket.handshake.query.token as string,
 			socket.handshake.query.uuid as string,
+			socket.handshake.query.pid as string | undefined,
 			socket
 		).catch((e) => console.error(e))
 	}
@@ -391,6 +409,7 @@ io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents, 
 		connectDevice(
 			token,
 			uuid,
+			undefined,
 			socket,
 			callback as (response: Response, callback?: Function) => void
 		)
@@ -446,6 +465,29 @@ io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents, 
 				uuid,
 				pid,
 				callback as (response: Response, callback?: Function) => void
+			)
+	)
+	socket.on(
+		'notify',
+		(
+			{
+				token,
+				uuid,
+				msg,
+			}: {
+				token: string
+				uuid: string
+				msg: { closed: boolean; opening: boolean; closing: boolean }
+			},
+			callback?: Function
+		) =>
+			forward(
+				'notify',
+				token,
+				uuid,
+				undefined,
+				callback as (response: Response, callback?: Function) => void,
+				msg
 			)
 	)
 	socket.on(
