@@ -63,7 +63,7 @@
 	},
 	"scripts": {
 		"build": "tsc",
-		"start": "yarn run build && node build/index.js",
+		"start": "yarn run build && node --inspect build/index.js",
 		"test": "yarn run build && node build/test.js",
 		"eslint": "eslint src/*",
 		"listen": "node --trace_gc --max-old-space-size=8192 --inspect build/server.js",
