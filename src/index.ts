@@ -13,7 +13,6 @@ import FindRequest = PouchDB.Find.FindRequest
 
 const PORT = process.env.PORT || 5000
 const GDS_SECRET = process.env.GDS_SECRET || 'S3l3n1umSh@z@m'
-const ANONYMOUS = process.env.ANONYMOUS !== 'false'
 const SUPERUSER_SECRET = process.env.SUPERUSER_SECRET || 'S3l3n1umSh@z@m@br@c@d@br@'
 const DEVICE_SECRET = process.env.GDS_SECRET || 'S3l3n1umSh@z@mH0cu5P0cu5'
 
@@ -221,7 +220,7 @@ async function forward(
 	callback: (response: Response, callback?: Function) => void,
 	msg?: any
 ) {
-	if (validateToken(token) && pid && (ANONYMOUS || (await isValid(uuid, pid)))) {
+	if (validateToken(token) && pid && (await isValid(uuid, pid))) {
 		console.log(`Forwarding: ${uuid}, ${action}${msg ? ' < ' + JSON.stringify(msg) : ''}`)
 		;(garageDoors[uuid] &&
 			garageDoors[uuid].emit(action, { ts: +new Date(), ...(msg || {}) }, (response: any) => {
@@ -333,12 +332,14 @@ async function rights(
 ) {
 	if (validateToken(token)) {
 		const fullId = getFullId(uuid, pid)
-		const { canLock } = validateSuperToken(token)
-			? { canLock: true }
-			: await db.get<PhoneIdentifier>(fullId).catch(() => ({ canLock: false }))
+		const { canLock, confirmed } = validateSuperToken(token)
+			? { canLock: true, confirmed: true }
+			: await db
+					.get<PhoneIdentifier>(fullId)
+					.catch(() => ({ canLock: false, confirmed: false }))
 		callback({
 			status: 200,
-			response: { canLock },
+			response: { canLock, confirmed },
 		})
 	} else {
 		callback({ status: 401 })
