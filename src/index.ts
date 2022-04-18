@@ -34,7 +34,10 @@ interface ServerToClientEvents {
 		msg: { ts: number; token: string; uuid: string; pid: string },
 		callback?: Function
 	) => void
-	notify: (msg: { ts: number; token: string; uuid: string }, callback?: Function) => void
+	notify: (
+		msg: { closed: boolean; open: boolean; opening: boolean; closing: boolean },
+		callback?: Function
+	) => void
 }
 
 interface ClientToServerEvents {
@@ -105,7 +108,7 @@ const db = new PouchDB('https://rus:s3cur3dD00rF0rRUS@couch-cluster-02.icure.clo
 db.createIndex({
 	index: { fields: ['referrer', 'uuid', 'ts'] },
 })
-	.then(function (result) {
+	.then(function () {
 		console.log('Indexes created')
 	})
 	.catch(function (err) {
@@ -117,7 +120,7 @@ const garageDoors: {
 	[key: string]: Socket<ClientToServerEvents, ServerToClientEvents, {}>
 } = {}
 const remotes: {
-	[key: string]: Socket<ClientToServerEvents, ServerToClientEvents, {}>
+	[key: string]: Socket<ClientToServerEvents, ServerToClientEvents, {}>[]
 } = {}
 
 const validateToken = (token: string) =>
@@ -170,7 +173,7 @@ app.use((req, res, next) => {
 	res.setHeader(
 		'Access-Control-Allow-Origin',
 		(req.headers.origin && req.headers.origin.toString()) ||
-			(req.headers['referer'] as string | undefined)?.replace(/(https?:\/\/.+?)\/.*/, '$1') ||
+			req.headers['referer']?.replace(/(https?:\/\/.+?)\/.*/, '$1') ||
 			'*'
 	)
 	if (req.method === 'OPTIONS') {
@@ -213,19 +216,12 @@ async function forward(
 	callback: (response: Response, callback?: Function) => void,
 	msg?: any
 ) {
-	if (
-		(validateToken(token) && pid && (ANONYMOUS || (await isValid(uuid, pid)))) ||
-		validateDeviceToken(token)
-	) {
+	if (validateToken(token) && pid && (ANONYMOUS || (await isValid(uuid, pid)))) {
 		console.log(`Forwarding: ${uuid}, ${action}${msg ? ' < ' + JSON.stringify(msg) : ''}`)
 		;(garageDoors[uuid] &&
 			garageDoors[uuid].emit(action, { ts: +new Date(), ...(msg || {}) }, (response: any) => {
 				callback({ status: 200, response })
 			})) ||
-			(remotes[uuid] &&
-				remotes[uuid].emit(action, { ts: +new Date(), ...(msg || {}) }, (response: any) => {
-					callback({ status: 200, response })
-				})) ||
 			callback({ status: 404 })
 	} else {
 		callback({ status: 401 })
@@ -337,7 +333,7 @@ async function connectDevice(
 		callback?.({ status: 200, response: { uuid } })
 	} else if (pid && validateToken(token) && isValid(uuid, pid)) {
 		console.log(`Registering: ${uuid}`)
-		remotes[uuid] = socket
+		remotes[uuid] = (remotes[uuid] ?? []).concat(socket)
 		callback?.({ status: 200, response: { uuid } })
 	} else {
 		console.log(`Registering: ${uuid} failed due to incorrect token`)
@@ -354,7 +350,7 @@ async function openDoor(
 	await forward('open', token, uuid, pid, callback)
 	try {
 		await db.put({ _id: uuidV4(), uuid, pid, ts: +new Date(), type: 'log' })
-		const invitations = (
+		const userInvitations = (
 			(await db.find({
 				selector: {
 					referrer: pid,
@@ -365,7 +361,7 @@ async function openDoor(
 			} as FindRequest<Invitation>)) as PouchDB.Find.FindResponse<Invitation>
 		).docs
 
-		const lastInvitationTs = invitations.length ? invitations[0].ts : undefined
+		const lastInvitationTs = userInvitations.length ? userInvitations[0].ts : undefined
 		if (lastInvitationTs && lastInvitationTs < +new Date() - 30 * 24 * 3600 * 1000) {
 			const usage = (
 				await db.find({
@@ -469,26 +465,19 @@ io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents, 
 	)
 	socket.on(
 		'notify',
-		(
-			{
-				token,
-				uuid,
-				msg,
-			}: {
-				token: string
-				uuid: string
-				msg: { closed: boolean; opening: boolean; closing: boolean }
-			},
-			callback?: Function
-		) =>
-			forward(
-				'notify',
-				token,
-				uuid,
-				undefined,
-				callback as (response: Response, callback?: Function) => void,
-				msg
-			)
+		({
+			token,
+			uuid,
+			msg,
+		}: {
+			token: string
+			uuid: string
+			msg: { closed: boolean; open: boolean; opening: boolean; closing: boolean }
+		}) => {
+			if (msg && validateDeviceToken(token)) {
+				remotes[uuid].forEach((r) => r.emit('notify', msg))
+			}
+		}
 	)
 	socket.on(
 		'confirm',
