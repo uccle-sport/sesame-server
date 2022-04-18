@@ -69,6 +69,7 @@ interface ClientToServerEvents {
 		callback?: Function
 	) => void
 	invitations: (msg: { token: string; uuid: string; pid: string }, callback?: Function) => void
+	rights: (msg: { token: string; uuid: string; pid: string }, callback?: Function) => void
 	disconnect: () => void
 }
 
@@ -79,6 +80,7 @@ interface Response {
 
 interface PhoneIdentifier {
 	_id: string
+	_rev: string
 	uuid: string
 	pid: string
 	name: string
@@ -261,7 +263,7 @@ async function registerPid(
 				phone: previousPhone,
 				confirmed,
 			} = await db
-				.get<{ phone: string; confirmed: boolean }>(fullId)
+				.get<PhoneIdentifier>(fullId)
 				.then((x) => ({ rev: x._rev, phone: x.phone, confirmed: x.confirmed }))
 				.catch(() => ({ rev: undefined, phone: undefined, confirmed: undefined }))
 			const doc = {
@@ -315,6 +317,26 @@ async function invitations(
 		} catch (e) {
 			callback({ status: 500 })
 		}
+	} else {
+		callback({ status: 401 })
+	}
+}
+
+async function rights(
+	token: string,
+	uuid: string,
+	pid: string,
+	callback: (response: Response, callback?: Function) => void
+) {
+	if (validateToken(token)) {
+		const fullId = getFullId(uuid, pid)
+		const { canLock } = validateSuperToken(token)
+			? { canLock: true }
+			: await db.get<PhoneIdentifier>(fullId).catch(() => ({ canLock: false }))
+		callback({
+			status: 200,
+			response: { canLock },
+		})
 	} else {
 		callback({ status: 401 })
 	}
@@ -537,6 +559,11 @@ io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents, 
 				pid,
 				callback as (response: Response, callback?: Function) => void
 			)
+	)
+	socket.on(
+		'rights',
+		({ token, uuid, pid }: { token: string; uuid: string; pid: string }, callback?: Function) =>
+			rights(token, uuid, pid, callback as (response: Response, callback?: Function) => void)
 	)
 })
 app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'))
