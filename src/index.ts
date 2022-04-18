@@ -1,4 +1,6 @@
 import * as express from 'express'
+import * as bodyParser from 'body-parser'
+
 import * as NodeCache from 'node-cache'
 import { v4 as uuidV4 } from 'uuid'
 import * as PouchDB from 'pouchdb'
@@ -184,6 +186,7 @@ app.use((req, res, next) => {
 		next()
 	}
 })
+app.use(bodyParser.json({}))
 
 function getFullId(uuid: string, pid: string) {
 	return `${uuid.replace(/[^0-9a-fA-F-]/g, '')}:${pid.replace(/[^0-9a-fA-F-]/g, '')}`
