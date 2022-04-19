@@ -162,31 +162,6 @@ async function confirmPid(
 	}
 }
 
-app.use(express.static('public'))
-app.use((req, res, next) => {
-	res.setHeader('Access-Control-Allow-Credentials', 'true')
-	res.setHeader(
-		'Access-Control-Allow-Headers',
-		req.headers['access-control-request-headers'] || 'content-type, accept, authorization'
-	)
-	res.setHeader(
-		'Access-Control-Allow-Methods',
-		req.headers['access-control-request-method'] || 'GET, POST, DELETE, PUT, OPTIONS'
-	)
-	res.setHeader(
-		'Access-Control-Allow-Origin',
-		(req.headers.origin && req.headers.origin.toString()) ||
-			req.headers['referer']?.replace(/(https?:\/\/.+?)\/.*/, '$1') ||
-			'*'
-	)
-	if (req.method === 'OPTIONS') {
-		res.sendStatus(200)
-	} else {
-		next()
-	}
-})
-app.use(bodyParser.json({}))
-
 function getFullId(uuid: string, pid: string) {
 	return `${uuid.replace(/[^0-9a-fA-F-]/g, '')}:${pid.replace(/[^0-9a-fA-F-]/g, '')}`
 }
@@ -570,6 +545,30 @@ io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents, 
 			rights(token, uuid, pid, callback as (response: Response, callback?: Function) => void)
 	)
 })
+app.use(express.static('public'))
+app.use((req, res, next) => {
+	res.setHeader('Access-Control-Allow-Credentials', 'true')
+	res.setHeader(
+		'Access-Control-Allow-Headers',
+		req.headers['access-control-request-headers'] || 'content-type, accept, authorization'
+	)
+	res.setHeader(
+		'Access-Control-Allow-Methods',
+		req.headers['access-control-request-method'] || 'GET, POST, DELETE, PUT, OPTIONS'
+	)
+	res.setHeader(
+		'Access-Control-Allow-Origin',
+		(req.headers.origin && req.headers.origin.toString()) ||
+			req.headers['referer']?.replace(/(https?:\/\/.+?)\/.*/, '$1') ||
+			'*'
+	)
+	if (req.method === 'OPTIONS') {
+		res.sendStatus(200)
+	} else {
+		next()
+	}
+})
+app.use(bodyParser.json({}))
 app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'))
 app.post('/confirm', (req, res) => {
 	const auth = req.headers.authorization && req.headers.authorization.substring('BASIC '.length)
@@ -589,6 +588,12 @@ app.post('/confirm', (req, res) => {
 	}).catch(() => {
 		res.status(500).send('Unexpected error')
 	})
+})
+
+app.get('*', function (req, res) {
+	if (req.path.match(/\/([a-zA-Z]+)\/?/)) {
+		res.sendFile('index.html', { root: 'public' })
+	}
 })
 
 http.listen(PORT, () => {
