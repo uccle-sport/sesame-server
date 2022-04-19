@@ -591,9 +591,7 @@ app.post('/confirm', (req, res) => {
 })
 
 app.get('*', function (req, res) {
-	if (req.path.match(/\/([a-zA-Z]+)\/?/)) {
-		res.sendFile('index.html', { root: 'public' })
-	}
+	res.sendFile('index.html', { root: 'public' })
 })
 
 http.listen(PORT, () => {
