@@ -14,7 +14,7 @@ import FindRequest = PouchDB.Find.FindRequest
 const PORT = process.env.PORT || 5000
 const GDS_SECRET = process.env.GDS_SECRET || 'S3l3n1umSh@z@m'
 const SUPERUSER_SECRET = process.env.SUPERUSER_SECRET || 'S3l3n1umSh@z@m@br@c@d@br@'
-const DEVICE_SECRET = process.env.GDS_SECRET || 'S3l3n1umSh@z@mH0cu5P0cu5'
+const DEVICE_SECRET = process.env.DEVICE_SECRET || 'S3l3n1umSh@z@mH0cu5P0cu5'
 
 PouchDB.plugin(PouchDBFind)
 
