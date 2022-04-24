@@ -1,0 +1,38 @@
+{
+  "ContentHead": {},
+  "Header": {
+    "sesame": "Sésame",
+    "settings": "Préférences"
+  },
+  "Main": {
+    "welcome": "Bienvenue sur Sésame",
+    "subtitle": "Votre télécommande d’abri à vélos.",
+    "open": "L’abri est ouvert",
+    "closed": "L’abri est fermé",
+    "opening": "L’abri s'ouvre'",
+    "closing": "L’abri se ferme",
+    "unknown": "Le statut de l’abri est inconnu'",
+    "openShed": "Ouvrir l’abri",
+    "closeShed": "Fermer l’abri",
+    "waiting": "Veuillez patienter"
+  },
+  "Settings": {
+    "info-1": "Veuillez compléter l'information ci-dessous",
+    "info-2": "Vérifiez bien votre numéro de téléphone portable. Il est utilisé pour valider votre accès.",
+    "info-3": "Votre numéro de téléphone n'a pas été validé. Veuillez vérifier l'information ci-dessous et presser le bouton Valider",
+    "name": "Votre nom",
+    "mobile-phone": "Téléphone portable",
+    "give-access": "Partager l’accès",
+    "submit": "Confirmer",
+    "update": "Mettre à jour",
+    "validate": "Valider",
+    "advanced": "Fonctions avancées",
+    "keep-open": "Laisser ouvert jusque"
+  },
+  "Validate": {
+    "info-1": "Veuillez introduire le code reçu par SMS.",
+    "no-code": "Je n’ai pas reçu de code",
+    "validation-code": "Code de validation",
+    "submit": "Confirmer"
+  }
+}

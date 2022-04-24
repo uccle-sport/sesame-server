@@ -1,0 +1,38 @@
+{
+  "ContentHead": {},
+  "Header": {
+    "sesame": "Sésame",
+    "settings": "Settings"
+  },
+  "Main": {
+    "welcome": "Welcome to Sésame",
+    "subtitle": "The bike shed remote control.",
+    "open": "The bike shed is open",
+    "closed": "The bike shed is closed",
+    "opening": "The bike shed is opening",
+    "closing": "The bike shed is closing",
+    "unknown": "The status of the bike shed is unknown",
+    "openShed": "Open shed",
+    "closeShed": "Close shed",
+    "waiting": "Please wait"
+  },
+  "Settings": {
+    "info-1": "Please fill in the information below.",
+    "info-2": "Be sure to double check your phone number as it will be used to send your validation code.",
+    "info-3": "Your phone number has not been confirmed. Please double check the information below and press the Validate button.",
+    "name": "Your name",
+    "mobile-phone": "Mobile phone",
+    "give-access": "Share access",
+    "submit": "Confirm",
+    "update": "Update",
+    "validate": "Validate",
+    "advanced": "Advanced features",
+    "keep-open": "Leave open until"
+  },
+  "Validate": {
+    "info-1": "Please enter the validation code you have received by SMS.",
+    "no-code": "I received no code",
+    "validation-code": "Validation code",
+    "submit": "Confirm"
+  }
+}
