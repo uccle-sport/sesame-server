@@ -123,7 +123,7 @@ const garageDoors: {
 	[key: string]: Socket<ClientToServerEvents, ServerToClientEvents, {}>
 } = {}
 const remotes: {
-	[key: string]: Socket<ClientToServerEvents, ServerToClientEvents, {}>[]
+	[key: string]: { [key: string]: Socket<ClientToServerEvents, ServerToClientEvents, {}> }
 } = {}
 
 const validateToken = (token: string) =>
@@ -332,9 +332,12 @@ async function connectDevice(
 		console.log(`Registering: ${uuid}`)
 		garageDoors[uuid] = socket
 		callback?.({ status: 200, response: { uuid } })
-	} else if (pid && validateToken(token) && isValid(uuid, pid)) {
+	} else if (pid && validateToken(token) && (await isValid(uuid, pid))) {
 		console.log(`Registering: ${uuid}`)
-		remotes[uuid] = (remotes[uuid] ?? []).concat(socket)
+		;(remotes[uuid] || (remotes[uuid] = {}))[pid] = socket
+		socket.conn.on('close', () => {
+			remotes[uuid]?.[pid] && delete remotes[uuid]?.[pid]
+		})
 		callback?.({ status: 200, response: { uuid } })
 	} else {
 		console.log(`Registering: ${uuid} failed due to incorrect token`)
@@ -476,7 +479,7 @@ io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents, 
 			msg: { closed: boolean; open: boolean; opening: boolean; closing: boolean }
 		}) => {
 			if (msg && validateDeviceToken(token)) {
-				remotes[uuid].forEach((r) => r.emit('notify', msg))
+				Object.values(remotes[uuid] || {}).forEach((r) => r.emit('notify', msg))
 			}
 		}
 	)
