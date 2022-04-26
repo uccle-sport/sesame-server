@@ -9,11 +9,12 @@
     "subtitle": "Votre télécommande d’abri à vélos",
     "open": "L’abri est ouvert",
     "closed": "L’abri est fermé",
-    "opening": "L’abri s'ouvre'",
+    "opening": "L’abri s'ouvre",
     "closing": "L’abri se ferme",
     "unknown": "Le statut de l’abri est inconnu",
     "openShed": "Ouvrir l’abri",
     "closeShed": "Fermer l’abri",
+    "temporisation": "Demande envoyée",
     "waiting": "Veuillez patienter"
   },
   "Settings": {
